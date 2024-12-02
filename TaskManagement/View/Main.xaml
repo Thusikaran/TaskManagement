@@ -1,0 +1,153 @@
+﻿<Window x:Class="TaskManagement.View.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModel="clr-namespace:TaskManagement.ViewModel"
+        xmlns:local="clr-namespace:TaskManagement.Controls"
+        xmlns:converters="clr-namespace:TaskManagement.Converters"
+        Title="Task Management" Height="650" Width="1200">
+
+    <Window.Resources>
+        <!-- Rotation Animation for Outer Ring -->
+        <Storyboard x:Key="OuterRingAnimation" RepeatBehavior="Forever" >
+            <DoubleAnimation
+            Storyboard.TargetName="OuterRingTransform"
+            Storyboard.TargetProperty="Angle"
+            From="0"
+            To="360"
+            Duration="0:0:1"
+            AutoReverse="False" />
+        </Storyboard>
+
+        <!-- Reverse Rotation Animation for Middle Ring -->
+        <Storyboard x:Key="MiddleRingAnimation" RepeatBehavior="Forever">
+            <DoubleAnimation
+            Storyboard.TargetName="MiddleRingTransform"
+            Storyboard.TargetProperty="Angle"
+            From="0"
+            To="-360"
+            Duration="0:0:0.5"
+            AutoReverse="False" />
+        </Storyboard>
+
+        <!-- Rotation Animation for Inner Ring -->
+        <Storyboard x:Key="InnerRingAnimation" RepeatBehavior="Forever">
+            <DoubleAnimation
+            Storyboard.TargetName="InnerRingTransform"
+            Storyboard.TargetProperty="Angle"
+            From="0"
+            To="360"
+            Duration="0:0:1.5"
+            AutoReverse="False" />
+        </Storyboard>
+    </Window.Resources>
+
+
+
+    <!-- Set DataContext to the ViewModel -->
+    <Window.DataContext>
+        <viewModel:TaskViewModel />
+    </Window.DataContext>
+
+
+
+
+    <Grid Background="#F5F5F5">
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <ComboBox x:Name="PriorityComboBox"
+              SelectedValue="{Binding SelectedPriority, Mode=TwoWay}" 
+              Margin="25,25,25,20" Height="30" Width="150" Padding="15 7 7 7"
+              VerticalAlignment="Top"
+              HorizontalAlignment="left"
+              BorderThickness="1"
+              BorderBrush="#E0E0E0"
+              ItemsSource="{Binding PriorityList}">
+            </ComboBox>
+
+            <ComboBox x:Name="sortComboBox"
+              SelectedValue="{Binding SortOption, Mode=TwoWay}" 
+              Margin="50,25,25,20" Height="30" Width="150" Padding="15  7 7 7"
+              VerticalAlignment="Top"
+              HorizontalAlignment="left"
+              BorderThickness="1"
+              BorderBrush="#E0E0E0"
+              ItemsSource="{Binding SortList}">
+            </ComboBox>
+        
+        </StackPanel>
+
+        <ListView Name="UserList" ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" BorderBrush="#cdcdcd" 
+          Margin="25,70,25,25" Padding="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding Title}" Header="Title" />
+                    <GridViewColumn Width="200" DisplayMemberBinding="{Binding Description}" Header="Description" />
+                    <GridViewColumn Width="150" Header="DueDate">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DueDate, StringFormat=\{0:yyyy-MM-dd\}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Priority}" Header="Priority" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Grid Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- Spinner Definition -->
+            <Grid Width="48" Height="48" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- Outer Ring -->
+                <Ellipse
+                    Width="48"
+                    Height="48"
+                    Stroke="#FFF"
+                    StrokeThickness="3"
+                    StrokeDashArray="3,3"
+                    RenderTransformOrigin="0.5,0.5">
+                    <Ellipse.RenderTransform>
+                        <RotateTransform x:Name="OuterRingTransform" />
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+
+                <!-- Middle Ring -->
+                <Ellipse
+                    Width="40"
+                    Height="40"
+                    Stroke="#FF3D00"
+                    StrokeThickness="3"
+                    StrokeDashArray="3,3"
+                    RenderTransformOrigin="0.5,0.5">
+                    <Ellipse.RenderTransform>
+                        <RotateTransform x:Name="MiddleRingTransform" />
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+
+                <!-- Inner Ring -->
+                <Ellipse
+                    Width="32"
+                    Height="32"
+                    Stroke="#FFF"
+                    StrokeThickness="3"
+                    StrokeDashArray="3,3"
+                    RenderTransformOrigin="0.5,0.5">
+                    <Ellipse.RenderTransform>
+                        <RotateTransform x:Name="InnerRingTransform" />
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Grid>
+        </Grid>
+
+
+
+        <!-- Add Task Button -->
+        <Button Content="Add Task"  Style="{StaticResource AddButton}"  Command="{Binding ShowWindowCommand}" Height="30" Width="100" 
+                Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+        <!-- Delete Task Button -->
+        <Button Content="Delete Task" Command="{Binding DeleteTaskCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserList}"
+        Height="30" Width="100" Margin="25 25 140 25" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+
+    </Grid>
+</Window>

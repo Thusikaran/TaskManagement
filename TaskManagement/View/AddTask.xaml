@@ -1,0 +1,42 @@
+﻿<Window x:Class="TaskManagement.View.AddTask"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManagement.View"
+        mc:Ignorable="d"
+        Title="Add Task" Height="450" Width="400">
+    
+    
+
+    <Grid>
+        <!-- Title Label and TextBox -->
+        <Label Content="Title" Margin="25" VerticalAlignment="Top" HorizontalAlignment="left"/>
+        <TextBox Height="30" Text="{Binding Title}" Width="330"  Padding="5" Margin="25,50" VerticalAlignment="Top" HorizontalAlignment="left" BorderThickness="1"  /> 
+
+        <!-- Description Label and TextBox -->
+        <Label Content="Description" Margin="25,100" VerticalAlignment="Top" HorizontalAlignment="left"/>
+        <TextBox Height="30" Text="{Binding Description}" Width="330" Padding="5"  Margin="25,125" VerticalAlignment="Top" HorizontalAlignment="left" BorderThickness="1" BorderBrush="#E0E0E0" />
+
+        <!-- Due Date Label and Date Picker -->
+        <Label Height="30" Content="Due Date" Margin="25,175" VerticalAlignment="Top" HorizontalAlignment="left"/>
+        <DatePicker SelectedDate="{Binding DueDate}" Width="330" Padding="4 "  Margin="25,200,25,20" VerticalAlignment="Top" HorizontalAlignment="left" BorderBrush="#E0E0E0" BorderThickness="1"/>
+
+        <!-- Priority Label and TextBox -->
+        <Label Content="Priority" Margin="25,260,25,20" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        
+        <ComboBox x:Name="PriorityComboBox"
+          SelectedValue="{Binding Priority, Mode=TwoWay}" 
+          Margin="25,285,25,20" Height="30" Width="330" Padding="5" 
+          VerticalAlignment="Top"
+          HorizontalAlignment="left"
+          BorderThickness="1"
+          BorderBrush="#E0E0E0"
+          ItemsSource="{Binding PriorityList}">
+        </ComboBox>
+
+
+        <!-- Add Button -->
+        <Button Height="30" Command="{Binding AddTaskCommand}" Content="Add" Width="70" VerticalContentAlignment="Center" Padding="5" Margin="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0"/>
+    </Grid>
+</Window>
